@@ -18,15 +18,15 @@ RUN apk update && \
     LATEST_VERSION=$(curl https://api.github.com/repos/GoMetric/statsd-http-proxy/releases/latest 2>/dev/null | grep tag_name | awk -F'"' '{print $4}') && \
     VERSION=${VERSION:-$LATEST_VERSION} && \
     # download source
-    wget https://github.com/GoMetric/statsd-http-proxy/archive/$VERSION.tar.gz && \
-    tar -zxvf ${VERSION}.tar.gz && \
-    cd statsd-http-proxy-${VERSION} && \
+    git clone https://github.com/GoMetric/statsd-http-proxy && \
+    cd statsd-http-proxy && \
+    git checkout ${VERSION} && \
     # make and install source
     make build && \
     chmod +x ./bin/statsd-http-proxy && \
     mv ./bin/statsd-http-proxy /usr/local/bin && \
     # clear
-    cd .. && rm -rf statsd-http-proxy-${VERSION} && \
+    cd .. && rm -rf statsd-http-proxy && \
     apk del .build-deps
 
 # start service
